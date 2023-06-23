@@ -1,0 +1,32 @@
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'test-connection'
+  imageRepository: 'test-devops'
+  containerRegistry: 'ngbit95.azurecr.io'
+  dockerfilePath: '**/Dockerfile'
+  tag: '$(Build.SourceBranchName)-$(Build.BuildId)'
+
+  # Agent VM image name
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
