@@ -13,6 +13,8 @@ variables:
   tag: '$(Build.SourceBranchName)-$(Build.BuildId)'
 
   # Agent VM image name
+pool:
+  vmImage: 'ubuntu-latest'
 
 stages:
 - stage: Build
